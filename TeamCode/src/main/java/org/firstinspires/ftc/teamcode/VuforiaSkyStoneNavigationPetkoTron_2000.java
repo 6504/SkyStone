@@ -279,12 +279,14 @@ public class VuforiaSkyStoneNavigationPetkoTron_2000 extends LinearOpMode {
         // The two examples below assume that the camera is facing forward out the front of the robot.
 
         // We need to rotate the camera around it's long axis to bring the correct camera forward.
-        //if (CAMERA_CHOICE == BACK) {
-        //    phoneYRotate = -90;
-        //} else {
-        //    phoneYRotate = 90;
-        //}
+        if (CAMERA_CHOICE == BACK) {
+           phoneYRotate = -90;
+        } else {
+            phoneYRotate = 90;
+        }
 
+        //Looking at the red perimeter target is 0 degrees
+        phoneZRotate = -90;
         // Rotate the phone vertical about the X axis if it's in portrait mode
         if (PHONE_IS_PORTRAIT) {
             phoneXRotate = 90 ;
@@ -292,8 +294,8 @@ public class VuforiaSkyStoneNavigationPetkoTron_2000 extends LinearOpMode {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float CAMERA_FORWARD_DISPLACEMENT  = 3.0f * mmPerInch;   // eg: Camera is 3 Inches in front of robot center
-        final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float CAMERA_FORWARD_DISPLACEMENT  = 6.0f * mmPerInch;   // eg: Camera is 3 Inches in front of robot center
+        final float CAMERA_VERTICAL_DISPLACEMENT = 7.5f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float CAMERA_LEFT_DISPLACEMENT     = 5.5f * mmPerInch;     // eg: Camera is 5.5 inches left of the robot's center line
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix

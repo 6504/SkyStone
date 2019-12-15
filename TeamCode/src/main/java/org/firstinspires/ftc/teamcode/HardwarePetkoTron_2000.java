@@ -68,11 +68,12 @@ public class HardwarePetkoTron_2000 {
 
     public PIDController pidDrive;
     public double desiredHeading = 0;
+    public boolean isTurning = false;
 
     //Common positions and power levels for servos and motors
     public static final double INITIAL_CLAW = 1.0;
-    public static final double ARM_UP_POWER = 1.0;
-    public static final double ARM_DOWN_POWER = -0.5;
+    public static final double ARM_UP_POWER = -1.0;
+    public static final double ARM_DOWN_POWER = 0.8;
     public double frontLeftPower = 0;
     public double frontRightPower = 0;
     public double rearLeftPower = 0;
@@ -104,12 +105,15 @@ public class HardwarePetkoTron_2000 {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
 
+        //15 oscillations in 10 seconds
+        //Tu (period) is about .67 seconds
+        //Ku (max p) is about .07
         // Set up parameters for driving in a straight line.
-        pidDrive = new PIDController(.05, 0, 0);
+        pidDrive = new PIDController(.0006, .00003, .00003);
         pidDrive.setSetpoint(0);
         pidDrive.setOutputRange(0, 1);
         pidDrive.setInputRange(-90, 90);
-        pidDrive.enable();
+        pidDrive.disable();
 
         //Define and initialize motors
         leftFrontDrive = hwMap.get(DcMotor.class, "left_front_drive");
@@ -181,10 +185,17 @@ public class HardwarePetkoTron_2000 {
         // Use PID with imu input to drive in a straight line.
         // https://stemrobotics.cs.pdx.edu/node/7268
         double correction = 0;
-        if (zInput == 0) {
+        if (zInput == 0 && (xInput != 0 || yInput != 0)) {
+            // If we were turning but stopped turning, save the current heading as the desired heading
+            if (isTurning) {
+                desiredHeading = getHeading();
+            }
+
+            isTurning = false;
             // Apply PID correction if we don't want to rotate
             correction = pidDrive.performPID(getHeading() - desiredHeading);
         } else {
+            isTurning = true;
             // Save the current heading as the desired heading if we are rotating
             // Also, don't apply a correction
             desiredHeading = getHeading();

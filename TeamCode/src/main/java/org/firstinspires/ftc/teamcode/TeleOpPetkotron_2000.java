@@ -86,13 +86,13 @@ public class TeleOpPetkotron_2000 extends OpMode {
         double yInput = gamepad1.left_stick_y;
         double zInput = gamepad1.right_stick_x;
 
-        if (abs(xInput) < 0.1) {
+        if (abs(xInput) < 0.05) {
             xInput = 0;
         }
-        if (abs(yInput) < 0.1) {
+        if (abs(yInput) < 0.05) {
             yInput = 0;
         }
-        if (abs(zInput) < 0.1) {
+        if (abs(zInput) < 0.05) {
             zInput = 0;
         }
 
@@ -100,13 +100,13 @@ public class TeleOpPetkotron_2000 extends OpMode {
         robot.PetkoTronDrive(xInput, yInput, zInput, true);
         //Controlling the arm (up and down)
         if(gamepad1.left_bumper) {
-            robot.arm.setPower(robot.ARM_UP_POWER);
+            robot.arm.setPower(robot.ARM_DOWN_POWER);
         } else {
             robot.arm.setPower(0);
         }
 
         if(gamepad1.right_bumper) {
-            robot.arm.setPower(robot.ARM_DOWN_POWER);
+            robot.arm.setPower(robot.ARM_UP_POWER);
         } else {
             robot.arm.setPower(0);
         }
