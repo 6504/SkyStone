@@ -31,7 +31,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -79,6 +81,9 @@ public class HardwarePetkoTron_2000 {
     public double rearLeftPower = 0;
     public double rearRightPower = 0;
 
+    //Attempting to initialize sensors
+    public ColorSensor sensorColor = null;
+    public DistanceSensor sensorDistance = null;
 
     /* local OpMode members. */
     HardwareMap hwMap =  null;
@@ -113,7 +118,7 @@ public class HardwarePetkoTron_2000 {
         pidDrive.setSetpoint(0);
         pidDrive.setOutputRange(0, 1);
         pidDrive.setInputRange(-90, 90);
-        pidDrive.disable();
+        pidDrive.disable(); //Disabled by default so that we only need to use it if we need it
 
         //Define and initialize motors
         leftFrontDrive = hwMap.get(DcMotor.class, "left_front_drive");
@@ -126,7 +131,7 @@ public class HardwarePetkoTron_2000 {
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        arm.setDirection(DcMotor.Direction.REVERSE);
+        //arm.setDirection(DcMotor.Direction.REVERSE);
 
         //Set all motors to zero power
         leftFrontDrive.setPower(0);
@@ -141,7 +146,7 @@ public class HardwarePetkoTron_2000 {
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         //Define and initialize ALL installed servos.
         leftClaw  = hwMap.get(Servo.class, "left_claw");
@@ -150,6 +155,10 @@ public class HardwarePetkoTron_2000 {
         rightClaw.setDirection(Servo.Direction.REVERSE);
         leftClaw.setPosition(INITIAL_CLAW);
         rightClaw.setPosition(INITIAL_CLAW);
+
+        //Initialize color and distance sensos
+        sensorColor = hwMap.get(ColorSensor.class, "color_sensor");
+        sensorDistance = hwMap.get(DistanceSensor.class, "color_sensor");
     }
 
     public void resetEncoders() {

@@ -82,6 +82,10 @@ public class TeleOpPetkotron_2000 extends OpMode {
         //leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
         //rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
+        double red = robot.sensorColor.red();
+        double green = robot.sensorColor.green();
+        double blue = robot.sensorColor.blue();
+
         double xInput = gamepad1.left_stick_x;
         double yInput = gamepad1.left_stick_y;
         double zInput = gamepad1.right_stick_x;
@@ -96,17 +100,30 @@ public class TeleOpPetkotron_2000 extends OpMode {
             zInput = 0;
         }
 
+        if(gamepad1.dpad_up) {
+            yInput = -0.30;
+        }
+        if(gamepad1.dpad_down) {
+            yInput = 0.30;
+        }
+        if(gamepad1.dpad_left) {
+            xInput = -0.30;
+        }
+        if(gamepad1.dpad_right) {
+            xInput = 0.30;
+        }
+
         //Setting the robot to use field-oriented drive
-        robot.PetkoTronDrive(xInput, yInput, zInput, true);
+        robot.PetkoTronDrive(xInput, yInput, zInput, false);
         //Controlling the arm (up and down)
         if(gamepad1.left_bumper) {
-            robot.arm.setPower(robot.ARM_DOWN_POWER);
+            robot.arm.setPower(robot.ARM_UP_POWER);
         } else {
             robot.arm.setPower(0);
         }
 
         if(gamepad1.right_bumper) {
-            robot.arm.setPower(robot.ARM_UP_POWER);
+            robot.arm.setPower(robot.ARM_DOWN_POWER);
         } else {
             robot.arm.setPower(0);
         }
@@ -122,14 +139,16 @@ public class TeleOpPetkotron_2000 extends OpMode {
             robot.leftClaw.setPosition(Range.clip(robot.leftClaw.getPosition()-0.2,0,1));
         }
 
+        //RGB of field tiles: (42, 46, 42)
+        //RGB of red tape: (99, 38, 41)
+        //RGB of blue tape: (28, 50, 70)
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Current Heading: ", robot.getHeading());
         telemetry.addData("Desired Heading: ", robot.desiredHeading);
-        telemetry.addData("Joystick x value:", xInput);
-        telemetry.addData("Joystick y value:", yInput);
-        telemetry.addData("Joystick z value:", zInput);
         telemetry.addData("Motors", "front left (%.2f), front right (%.2f), rear left (%.2f), rear right (%.2f)", robot.frontLeftPower, robot.frontRightPower, robot.rearLeftPower, robot.rearRightPower);
+        telemetry.addData("xInput: ", xInput);
+        telemetry.addData("Pretty Colors", "red: "+red+", green: "+green+", blue: "+blue);
     }
 
     /*
