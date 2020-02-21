@@ -61,7 +61,7 @@ public class DriveLineRightwardPetkoTron_2000 extends LinearOpMode {
 
 
 
-    static final double APPROACH_SPEED  = 0.3;
+    static final double APPROACH_SPEED  = 0.2;
 
     @Override
     public void runOpMode() {
@@ -94,17 +94,21 @@ public class DriveLineRightwardPetkoTron_2000 extends LinearOpMode {
 
         //Start the robot moving to the side, and then begin looking for a white line.
         robot.pidDrive.enable();
-        robot.PetkoTronDrive(0, 0.3, 0, false);
+        robot.PetkoTronDrive(0, -0.3, 0, false);
         sleep(500);
 
         // run until a different color is seen OR the driver presses STOP;
         //RGB of field tiles: (42, 46, 42)
         //RGB of red tape: (99, 38, 41)
         //RGB of blue tape: (28, 50, 70)
-        while (opModeIsActive() && ((red <= 50 && red >= 37) && (green <= 54 && green >= 40) && (blue <= 50 && blue >= 37))) {
-            robot.PetkoTronDrive(APPROACH_SPEED, 0,0, false);
+        while (opModeIsActive()) {
+            if(((red <= 50 && red >= 37) && (green <= 50 && green >= 38) && (blue <= 50 && blue >= 37))) {
+                robot.PetkoTronDrive(APPROACH_SPEED, 0,0, false);
+            } else {
+                robot.PetkoTronDrive(0,0,0,false);
+            }
             //Display the light level while we are looking for the line
-            telemetry.addData("Pretty Colors", "red: "+red+", green: "+green+", blue: "+blue+" ON FIELD");
+            telemetry.addData("Pretty Colors", "red: "+red+", green: "+green+", blue: "+blue+"");
             telemetry.update();
         }
 
